@@ -1,4 +1,4 @@
-class Ship:
+class BasicShip:
 
     def __init__(self, player, shape, additional={}):
         """ Initiates a basic ship
@@ -12,17 +12,5 @@ class Ship:
     def rotate(self, angle):
         self.shape.rotate(angle)
 
-
-class ShipPart:
-
-    def __init__(self, owner):
-        self.owner = owner
-        self._hit = False
-
-    def hit(self):
-        self._hit = True
-        return self.owner.name
-
-
-class ShipBow(ShipPart):
-    pass
+    def fire_gun(self, battlefield, coordinates):
+        battlefield[coordinates].hit()
