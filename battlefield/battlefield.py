@@ -12,3 +12,6 @@ class Battlefield():
     def __setitem__(self, key, value):
         key += self.size
         self.matrix[key.y][key.x].contents = value
+
+    def deploy_ship(self, ship, coordinates):
+        pass

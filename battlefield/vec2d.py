@@ -25,6 +25,16 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
     def direction(self):
         return self / len(self)
 
+    def rotate(self, angle):
+        """ rotates the vector, but only if the angle is a multiple of 90 """
+        angle %= 360
+        if angle == 90:
+            return Vec2D(-self.y, self.x)
+        elif angle == 270:
+            return Vec2D(self.y, -self.x)
+        elif angle == 180:
+            return -self
+
     def belongs_to_player(self, player):
         """ -----
             |2|3| These are the four positions.
