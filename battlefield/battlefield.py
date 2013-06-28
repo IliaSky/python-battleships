@@ -1,6 +1,6 @@
 class Battlefield():
 
-    def __init__(self, size, teams):
+    def __init__(self, size):
         self.size = size
         width, height = 2 * size.x, 2 * size.y
         self.matrix = [[Cell() for x in range(width)] for y in range(height)]
