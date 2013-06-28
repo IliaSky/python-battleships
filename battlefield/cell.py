@@ -7,6 +7,9 @@ class Cell():
     def is_empty(self):
         return self.contents is None
 
+    def is_not_empty(self):
+        return not self.is_empty
+
     def empty(self):
         self.contents = None
 

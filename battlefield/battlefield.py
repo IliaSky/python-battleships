@@ -1,7 +1,8 @@
 class Battlefield():
 
-    def __init__(self, size):
+    def __init__(self, size, terrain_coords=[]):
         self.size = size
+        self.ships = []
         width, height = 2 * size.x, 2 * size.y
         self.matrix = [[Cell() for x in range(width)] for y in range(height)]
 
@@ -13,5 +14,9 @@ class Battlefield():
         key += self.size
         self.matrix[key.y][key.x].contents = value
 
-    def deploy_ship(self, ship, coordinates):
-        pass
+    def deploy_ship(self, ship, coords, rotation):
+        if ship.can_be_deployed(self, coords, rotation):
+            ship.deploy(self, coords, rotation)
+            self.ships.append(ship)
+        else:
+            raise CannotDeployShip

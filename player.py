@@ -2,7 +2,7 @@ class Player:
 
     def __init__(self, battlefield_position, allies=[]):
         if battlefield_position not in range(4):
-            raise InvalidPositionError
+            raise InvalidPlayerPosition
         self.position = battlefield_position
         self.allies = allies
 

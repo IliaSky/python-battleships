@@ -35,7 +35,7 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
         elif angle == 180:
             return -self
 
-    def belongs_to_player(self, player):
+    def belongs_to(self, player):
         """ -----
             |2|3| These are the four positions.
             --x-- This method checks if a player's position is
