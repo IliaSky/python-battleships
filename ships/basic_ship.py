@@ -6,10 +6,13 @@ class BasicShip:
             with a vector pointing from the front to the back of the ship """
 
         self.player, self.shape, self.hp = player, shape, len(shape)
-        self.parts = [ShipPart(self) for i in range(len(shape))]
+        self.parts = [ShipPart(self) for i in range(len(self))]
 
         for key, value in additional.items():
             self.__dict__[key] = value
+
+    def __len__(self):
+        return len(self.shape)
 
     def fire_gun(self, battlefield, coords):
         battlefield[coords].hit()
@@ -32,9 +35,13 @@ class BasicShip:
         for coords, part in zip(self.parts_coords(), self.parts):
             battlefield[coords] = part
 
+    def undeploy(self, battlefield):
+        for coords, part in zip(self.parts_coords(), self.parts):
+            battlefield[coords] = None
+
     def parts_coords(self):
         coords, shape = self.coords, self.shape
-        return [coords + i * shape.direction() for i in range(len(shape))]
+        return [coords + i * shape.direction() for i in range(len(self))]
 
     def hit(self):
         self.hp -= 1

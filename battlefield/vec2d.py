@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import sqrt
+from math import sqrt, ceil
 
 
 class Vec2D(namedtuple('Vec2D', 'x y')):
@@ -21,6 +21,9 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
 
     def __len__(self):
         return sqrt(self.x**2 + self.y**2)
+
+    def square_length(self):
+        return self.x + self.y
 
     def direction(self):
         return self / len(self)
