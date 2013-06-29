@@ -1,3 +1,7 @@
+class MovableMixin:
+    pass
+
+
 class RadarMixin:
     pass
 

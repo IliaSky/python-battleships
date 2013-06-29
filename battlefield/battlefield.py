@@ -5,6 +5,8 @@ class Battlefield():
         self.ships = []
         width, height = 2 * size.x, 2 * size.y
         self.matrix = [[Cell() for x in range(width)] for y in range(height)]
+        for coords in terrain_coords:
+            self[coords] = Terrain()
 
     def __getitem__(self, key):
         key += self.size
@@ -20,3 +22,7 @@ class Battlefield():
             self.ships.append(ship)
         else:
             raise CannotDeployShip
+
+
+class Terrain:
+    pass

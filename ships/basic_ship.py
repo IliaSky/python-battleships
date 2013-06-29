@@ -5,7 +5,7 @@ class BasicShip:
             Note that the shape is always linear so it is represented
             with a vector pointing from the front to the back of the ship """
 
-        self.player, self.shape = player, shape
+        self.player, self.shape, self.hp = player, shape, len(shape)
         self.parts = [ShipPart(self) for i in range(len(shape))]
 
         for key, value in additional.items():
@@ -36,6 +36,9 @@ class BasicShip:
         coords, shape = self.coords, self.shape
         return [coords + i * shape.direction() for i in range(len(shape))]
 
+    def hit(self):
+        self.hp -= 1
+
 
 class ShipPart:
 
@@ -44,5 +47,6 @@ class ShipPart:
         self._hit = False
 
     def hit(self):
+        if not self._hit:
+            self.owner.hit()
         self._hit = True
-        return self.owner.name
