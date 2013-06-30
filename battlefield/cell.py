@@ -19,6 +19,14 @@ class Cell():
     def check_for_ship(self):
         return self.contains(ShipPart)
 
+    def radar_scan(self):
+        if not self.anti_radar:
+            return self.check_for_ship()
+        raise RadarJammed
+
+    def radar_jam(self):
+        self.anti_radar = True
+
     def hit(self):
         """ returns the name of the ship or false if there is no ship """
         if self.check_for_ship():

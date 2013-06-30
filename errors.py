@@ -4,3 +4,6 @@ class InvalidPlayerPosition(Exception):
 
 class CannotDeployShip(Exception):
     pass
+
+class RadarJammed(Exception):
+    pass

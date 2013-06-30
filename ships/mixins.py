@@ -25,11 +25,14 @@ class MovableMixin:
 
 
 class RadarMixin:
-    pass
+    def scan(self, battlefield, coords):
+        return [battlefield[i].radar_scan() for i in coords.nearby_coords(3)]
 
 
 class RadarJamMixin:
-    pass
+    def radar_jam(self, battlefield, coords):
+        for i in coords.nearby_coords(4):
+            battlefield[i].radar_jam()
 
 
 class TorpedoMixin:

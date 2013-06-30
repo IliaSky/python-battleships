@@ -28,6 +28,12 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
     def direction(self):
         return self / len(self)
 
+    def in_range(self, size):
+        offsets = [Vec2D(i, j) + Vec2D(size / 2, size / 2)
+                   for i in range(size) for j in range(size)]
+        return [self + offset for offset in offsets]
+
+
     def rotate(self, angle):
         """ rotates the vector, but only if the angle is a multiple of 90 """
         angle %= 360
