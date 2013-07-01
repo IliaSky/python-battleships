@@ -33,7 +33,6 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
                    for i in range(size) for j in range(size)]
         return [self + offset for offset in offsets]
 
-
     def rotate(self, angle):
         """ rotates the vector, but only if the angle is a multiple of 90 """
         angle %= 360
@@ -52,3 +51,18 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
             ----- """
         current_position = (self.x > 0) + 2 * (self.y > 0)
         return current_position == player.position
+
+    def in_direction(self, direction, length):
+        return [self + i * direction for i in range(length)]
+
+    @classmethod
+    def directions(self):
+        return [Vec2D(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1]
+                if not i == 0 and j == 0]
+
+    # @classmethod
+    # def direction_from_int(self, i):
+    #     """ 1  2  3 | 1 => (-1, -1)
+    #         4 (5) 6 | 5 => (0, 0)
+    #         7  8  9 | 9 => (1, 1)"""
+    #     return Vec2D((i - 1) % 3 - 1, (i - 1) / 3 - 1)

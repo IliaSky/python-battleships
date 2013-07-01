@@ -26,26 +26,33 @@ class MovableMixin:
 
 class RadarMixin:
     def scan(self, battlefield, coords):
-        return [battlefield[i].radar_scan() for i in coords.nearby_coords(3)]
+        return [battlefield[i].radar_scan() for i in coords.in_range(3)]
+
+
+class AirStrikeMixin:
+    def air_strike(self, battlefield, coords, direction):
+        return [battlefield[i].air_strike()
+                for i in coords.in_direction(direction, 3)]
+
+
+class TorpedoMixin:
+    def torpedo(self, battlefield, direction):
+        pass
 
 
 class RadarJamMixin:
     def radar_jam(self, battlefield, coords):
-        for i in coords.nearby_coords(4):
-            battlefield[i].radar_jam()
-
-
-class TorpedoMixin:
-    pass
-
-
-class TorpedoNetMixin:
-    pass
-
-
-class AirAttackMixin:
-    pass
+        for i in coords.in_range(4):
+            battlefield[i].deploy_anti("radar")
 
 
 class AntiAirMixin:
-    pass
+    def deploy_anti_air(self, battlefield, coords):
+        for i in coords.in_range(4):
+            battlefield[i].deploy_anti("air")
+
+
+class TorpedoNetMixin:
+    def torpedo_net(self, battlefield, coords, direction):
+        for i in coords.in_direction(direction, 3):
+            battlefield[i].deploy_anti("torpedo")

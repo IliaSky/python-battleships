@@ -57,3 +57,4 @@ class ShipPart:
         if not self._hit:
             self.owner.hit()
         self._hit = True
+        return "hit " + self.owner.name

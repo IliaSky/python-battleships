@@ -6,4 +6,5 @@ class CannotDeployShip(Exception):
     pass
 
 class RadarJammed(Exception):
-    pass
+    def __init__(self):
+        pass

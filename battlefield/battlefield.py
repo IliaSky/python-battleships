@@ -14,7 +14,7 @@ class Battlefield():
 
     def __setitem__(self, key, value):
         key += self.size
-        self.matrix[key.y][key.x].contents = value
+        self.matrix[key.y][key.x] = Cell(value)
 
     def deploy_ship(self, ship, coords, rotation):
         if ship.can_be_deployed(self, coords, rotation):

@@ -1,8 +1,8 @@
 class Cell():
 
-    def __init__(self, contents=None, anti_air=False, anti_radar=False):
+    def __init__(self, contents=None):
         self.contents = contents
-        self.anti_air, self.anti_radar = anti_air, anti_radar
+        self.defence = {"air": False, "radar": False, "torpedo": False}
 
     def is_empty(self):
         return self.contents is None
@@ -19,16 +19,24 @@ class Cell():
     def check_for_ship(self):
         return self.contains(ShipPart)
 
-    def radar_scan(self):
-        if not self.anti_radar:
-            return self.check_for_ship()
-        raise RadarJammed
-
-    def radar_jam(self):
-        self.anti_radar = True
-
     def hit(self):
-        """ returns the name of the ship or false if there is no ship """
         if self.check_for_ship():
             return self.contents.hit()
-        return False
+        return "miss"
+
+    def deploy_anti(self, key):
+        self.defence[key] = True
+
+    def radar_scan(self):
+        if self.defence[radar]:
+            return "jammed"
+        return ["empty", "ship"][self.check_for_ship()]
+
+    def air_strike(self):
+        if self.defence[air]:
+            return "aircraft destroyed"
+        return self.hit()
+
+    def torpedo_hit(self):
+        if self.check_for_ship():
+            return self.hit()
