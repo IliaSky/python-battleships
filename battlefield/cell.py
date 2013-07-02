@@ -1,8 +1,11 @@
+from misc import ShipPart, TorpedoNet
+
+
 class Cell():
 
     def __init__(self, contents=None):
         self.contents = contents
-        self.defence = {"air": False, "radar": False, "torpedo": False}
+        self.defence = {"air": False, "radar": False}
 
     def is_empty(self):
         return self.contents is None
@@ -38,5 +41,11 @@ class Cell():
         return self.hit()
 
     def torpedo_hit(self):
+        if self.contains(TorpedoNet):
+            return "torpedo caught"
         if self.check_for_ship():
             return self.hit()
+        return ""
+
+    def set_torpedo_net(self):
+        self.contents = TorpedoNet()

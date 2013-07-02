@@ -1,3 +1,6 @@
+from misc import ShipPart
+
+
 class BasicShip:
 
     def __init__(self, player, shape, additional={}):
@@ -13,6 +16,9 @@ class BasicShip:
 
     def __len__(self):
         return len(self.shape)
+
+    def ends(self):
+        return [self.coords, self.coords + self.shape]
 
     def fire_gun(self, battlefield, coords):
         battlefield[coords].hit()
@@ -45,16 +51,3 @@ class BasicShip:
 
     def hit(self):
         self.hp -= 1
-
-
-class ShipPart:
-
-    def __init__(self, owner):
-        self.owner = owner
-        self._hit = False
-
-    def hit(self):
-        if not self._hit:
-            self.owner.hit()
-        self._hit = True
-        return "hit " + self.owner.name

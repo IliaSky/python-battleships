@@ -1,3 +1,8 @@
+from cell import Cell
+from misc import Terrain
+from errors import CannotDeployShip
+
+
 class Battlefield():
 
     def __init__(self, size, terrain_coords=[]):
@@ -23,6 +28,3 @@ class Battlefield():
         else:
             raise CannotDeployShip
 
-
-class Terrain:
-    pass

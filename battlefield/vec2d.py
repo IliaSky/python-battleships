@@ -1,5 +1,5 @@
 from collections import namedtuple
-from math import sqrt, ceil
+from math import sqrt, ceil, abs
 
 
 class Vec2D(namedtuple('Vec2D', 'x y')):
@@ -55,8 +55,12 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
     def in_direction(self, direction, length):
         return [self + i * direction for i in range(length)]
 
+    def are_inside(self, battlefield):
+        return (abs(self.x) <= battlefield.size and
+                abs(self.y) <= battlefield.size)
+
     @classmethod
-    def directions(self):
+    def directions(cls):
         return [Vec2D(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1]
                 if not i == 0 and j == 0]
 

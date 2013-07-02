@@ -1,4 +1,5 @@
 from math import ceil
+from errors import CannotDeployShip
 
 
 class MovableMixin:
@@ -36,8 +37,15 @@ class AirStrikeMixin:
 
 
 class TorpedoMixin:
-    def torpedo(self, battlefield, direction):
-        pass
+    def torpedo(self, battlefield, coords, direction):
+        self.torpedos -= 1
+        torpedo_trail = []
+        coords += direction
+        while coords.are_inside(battlefield) and battlefield[coords].is_empty():
+            torpedo_trail.append(battlefield[coords].torpedo_hit())
+            coords += direction
+        torpedo_trail.append(battlefield[coords].torpedo_hit())
+        return torpedo_trail
 
 
 class RadarJamMixin:
@@ -55,4 +63,4 @@ class AntiAirMixin:
 class TorpedoNetMixin:
     def torpedo_net(self, battlefield, coords, direction):
         for i in coords.in_direction(direction, 3):
-            battlefield[i].deploy_anti("torpedo")
+            battlefield[i].set_torpedo_net()

@@ -1,3 +1,6 @@
+from errors import InvalidPlayerPosition
+
+
 class Player:
 
     def __init__(self, battlefield_position, allies=[]):
@@ -7,5 +10,5 @@ class Player:
         self.allies = allies
 
     def add_ally(self, ally):
-        allies.append(ally)
+        self.allies.append(ally)
         ally.allies.append(self)
