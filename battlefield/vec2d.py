@@ -20,7 +20,7 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
         return Vec2D(self.x / other, self.y / other)
 
     def __len__(self):
-        return sqrt(self.x**2 + self.y**2)
+        return sqrt(self.x ** 2 + self.y ** 2)
 
     def square_length(self):
         return self.x + self.y
@@ -32,16 +32,6 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
         offsets = [Vec2D(i, j) + Vec2D(size / 2, size / 2)
                    for i in range(size) for j in range(size)]
         return [self + offset for offset in offsets]
-
-    def rotate(self, angle):
-        """ rotates the vector, but only if the angle is a multiple of 90 """
-        angle %= 360
-        if angle == 90:
-            return Vec2D(-self.y, self.x)
-        elif angle == 270:
-            return Vec2D(self.y, -self.x)
-        elif angle == 180:
-            return -self
 
     def belongs_to(self, player):
         """ -----
@@ -58,6 +48,40 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
     def are_inside(self, battlefield):
         return (abs(self.x) <= battlefield.size and
                 abs(self.y) <= battlefield.size)
+
+    def _square_radius_from(self, other):
+        return max(abs(self.x - other.x), abs(self.y - other.y))
+
+    def _rotate_once(self, center=None):
+        """ This is an imitation of true rotation by thinking of concentric
+            squares around the center as circles and rotating by shifting the
+            coordinates in the squares a value equal to the 'square radius' """
+        center = center or Vec2D(0, 0)
+        r = self._square_radius_from(center)
+        x, y = (self - center).x, (self - center).y
+        x += (x != r)(y == -r) - (x != -r)(y == r)
+        y += (y != r)(x == r) - (y != -r)(x == -r)
+        return center + r * Vec2D(x, y)
+
+    def rotate(self, count=1, center=None):
+        """ This method does something similar to rotation (tweaked for only
+            integer coordinates). Rotating with a value count = k is similar
+            to rotating k * pi / 4 """
+        center = center or Vec2D(0, 0)
+        result = self
+        for i in range(count % 8):
+            result = result.rotate_around(center)
+        return result
+
+    # def simple_rotate(self, angle):
+    #     """ rotates the vector, but only if the angle is a multiple of 90 """
+    #     angle %= 360
+    #     if angle == 90:
+    #         return Vec2D(-self.y, self.x)
+    #     elif angle == 270:
+    #         return Vec2D(self.y, -self.x)
+    #     elif angle == 180:
+    #         return -self
 
     @classmethod
     def directions(cls):

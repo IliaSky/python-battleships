@@ -3,6 +3,7 @@ from errors import CannotDeployShip
 
 
 class MovableMixin:
+
     def move(self, battlefield, coords, rotation):
         old_coords = self.coords
         self.undeploy()
@@ -21,22 +22,27 @@ class MovableMixin:
         return len(self.coords - coords)
 
     def _rotate_cost(self, rotation):
-        """ 90, 270 => 1; 180 => 2 """
-        return (rotation / 90 % 4 - 1) % 2 + 1
+        """ Ships can only be rotated by 90, 180, 270 degrees
+            In ingame rotation units those are 2, 4 and 6
+            2(90deg), 6(270deg) => 1; 4(180deg) => 2 """
+        return (rotation / 2 % 4 - 1) % 2 + 1
 
 
 class RadarMixin:
+
     def scan(self, battlefield, coords):
         return [battlefield[i].radar_scan() for i in coords.in_range(3)]
 
 
 class AirStrikeMixin:
+
     def air_strike(self, battlefield, coords, direction):
         return [battlefield[i].air_strike()
                 for i in coords.in_direction(direction, 3)]
 
 
 class TorpedoMixin:
+
     def torpedo(self, battlefield, coords, direction):
         self.torpedos -= 1
         torpedo_trail = []
@@ -49,18 +55,21 @@ class TorpedoMixin:
 
 
 class RadarJamMixin:
+
     def radar_jam(self, battlefield, coords):
         for i in coords.in_range(4):
             battlefield[i].deploy_anti("radar")
 
 
 class AntiAirMixin:
+
     def deploy_anti_air(self, battlefield, coords):
         for i in coords.in_range(4):
             battlefield[i].deploy_anti("air")
 
 
 class TorpedoNetMixin:
+
     def torpedo_net(self, battlefield, coords, direction):
         for i in coords.in_direction(direction, 3):
             battlefield[i].set_torpedo_net()

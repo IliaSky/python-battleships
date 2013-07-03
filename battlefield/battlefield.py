@@ -27,4 +27,3 @@ class Battlefield():
             self.ships.append(ship)
         else:
             raise CannotDeployShip
-

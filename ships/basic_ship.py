@@ -4,10 +4,6 @@ from misc import ShipPart
 class BasicShip:
 
     def __init__(self, player, shape, additional={}):
-        """ Initiates a basic ship
-            Note that the shape is always linear so it is represented
-            with a vector pointing from the front to the back of the ship """
-
         self.player, self.shape, self.hp = player, shape, len(shape)
         self.parts = [ShipPart(self) for i in range(len(self))]
 
@@ -17,21 +13,21 @@ class BasicShip:
     def __len__(self):
         return len(self.shape)
 
-    def ends(self):
-        return [self.coords, self.coords + self.shape]
-
     def fire_gun(self, battlefield, coords):
         battlefield[coords].hit()
 
-    def rotate(self, angle):
-        self.shape = self.shape.rotate(angle)
+    def rotate(self, rotation):
+        """ Ships can only be rotated by a value of k * pi / 4
+            In ingame units that means that the unit value must be even """
+        if rotation % 2 == 0:
+            self.shape = self.shape.rotate(rotation)
 
     def can_be_deployed(self, battlefield, start_coords, rotation=0):
-        player, new_shape = self.player, self.shape.rotate(rotation)
-        mock_ship = BasicShip(player, new_shape, {coords: start_coords})
+        if rotation % 2 != 0:
+            return False
 
-        for coords in mock_ship.parts_coords():
-            if not coords.belong_to(player) or battlefield[coords].is_full():
+        for coords in self.shape.translate(start_coords).rotate(rotation):
+            if not coords.belong_to(self.player) or battlefield[coords].is_full():
                 return False
         return True
 
@@ -46,8 +42,7 @@ class BasicShip:
             battlefield[coords] = None
 
     def parts_coords(self):
-        coords, shape = self.coords, self.shape
-        return [coords + i * shape.direction() for i in range(len(self))]
+        return self.shape.translate(self.coords)
 
     def hit(self):
         self.hp -= 1
