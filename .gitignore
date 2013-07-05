@@ -1,2 +1,7 @@
 *.py[cod]
 trash.py
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
