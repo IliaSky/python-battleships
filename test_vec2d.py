@@ -1,7 +1,7 @@
 import unittest
 from vec2d import Vec2D
 from battlefield import Battlefield
-from errors import NonSupported
+from errors import DirectionNotSupported
 
 
 class TestVec2D(unittest.TestCase):
@@ -47,7 +47,7 @@ class TestVec2D(unittest.TestCase):
         self.assertEqual(Vec2D(-1, 1), Vec2D(-3, 3).direction())
         self.assertEqual(Vec2D(-1, 0), Vec2D(-3, 0).direction())
         self.assertRaises(ArithmeticError, Vec2D(0, 0).direction)
-        self.assertRaises(NonSupported, Vec2D(2, 1).direction)
+        self.assertRaises(DirectionNotSupported, Vec2D(2, 1).direction)
 
     def test_directions(self):
         directions = [Vec2D(-1, -1), Vec2D(-1, 0), Vec2D(-1, 1), Vec2D(0, -1),

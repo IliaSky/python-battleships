@@ -1,5 +1,5 @@
 from collections import namedtuple
-from errors import NonSupported
+from errors import DirectionNotSupported
 from fractions import gcd
 
 
@@ -26,6 +26,9 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
             needed to get to those coordinates from the center """
         return max(abs(self.x), abs(self.y))
 
+    def square_length(self):
+        return abs(self.x) + abs(self.y)
+
     def quadrant(self):
         """ |2|1| These are the quadrants known from math.
             |3|4| Returns 0 if the coordinates belongs to an axis"""
@@ -45,7 +48,7 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
             raise ArithmeticError("Cannot compute direction of zero vector")
         if self.x == 0 or self.y == 0 or self.x ** 2 - self.y ** 2 == 0:
             return self.__div__(abs(gcd(self.x, self.y)))
-        raise NonSupported("Direction not in Vec2D.directions")
+        raise DirectionNotSupported("Direction not in Vec2D.directions")
 
     def in_direction(self, direction, n):
         """ Returns a list of the next n coordinates in the direction """
@@ -74,9 +77,9 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
             coordinates in the squares a value equal to the 'square radius' """
         center = center or Vec2D(0, 0)
         x, y, r = (self - center).x, (self - center).y, len(self - center)
-        x += (x != r) * (y == -r) - (x != -r) * (y == r)
-        y += (y != r) * (x == r) - (y != -r) * (x == -r)
-        return center + Vec2D(x, y) * r
+        move_x = (x != r) * (y == -r) - (x != -r) * (y == r)
+        move_y = (y != r) * (x == r) - (y != -r) * (x == -r)
+        return center + self + Vec2D(move_x, move_y) * r
         # todo - fix formula
 
     def rotate(self, count=1, center=None):

@@ -6,7 +6,15 @@ class CannotDeployShip(Exception):
     pass
 
 
-class NonSupported(Exception):
+class DirectionNotSupported(Exception):
+    pass
+
+
+class InvalidShipAction(Exception):
+    pass
+
+
+class InsufficientAmmunition(Exception):
     pass
 
 

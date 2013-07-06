@@ -1,5 +1,5 @@
 import unittest
-from basic_ship import BasicShip
+from ship import Ship
 from battlefield import Battlefield
 from shape import Shape
 from player import Player
@@ -7,14 +7,14 @@ from vec2d import Vec2D
 from errors import NonDeployedShipTriesToAct
 
 
-class TestBasicShip(unittest.TestCase):
+class TestShip(unittest.TestCase):
 
     def setUp(self):
         self.sea = Battlefield(Vec2D(6, 6))
         terrain = [Vec2D(1, 1), Vec2D(-1, -1)]
         self.sea2 = Battlefield(Vec2D(6, 6), terrain)
-        self.ship = BasicShip("Battle Criuser", Player(1), Shape.line(5))
-        self.ship2 = BasicShip("Carrier", Player(3), Shape.square(3))
+        self.ship = Ship("Battle Criuser", Player(1), Shape.line(5))
+        self.ship2 = Ship("Carrier", Player(3), Shape.square(3))
 
     def tearDown(self):
         self.sea, self.ship, self.ship2 = None, None, None
