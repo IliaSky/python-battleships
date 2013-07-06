@@ -3,10 +3,10 @@ from errors import InvalidPlayerPosition
 
 class Player:
 
-    def __init__(self, battlefield_position, allies=[]):
-        if battlefield_position not in range(4):
+    def __init__(self, quadrant, allies=[]):
+        if quadrant not in [1, 2, 3, 4]:
             raise InvalidPlayerPosition
-        self.position = battlefield_position
+        self.position = quadrant
         self.allies = allies
 
     def add_ally(self, ally):

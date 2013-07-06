@@ -1,11 +1,18 @@
+from vec2d import Vec2D
+
+
 class Shape:
 
-    def __init__(self, coords_list, center=None):
+    def __init__(self, coords_list, rotation_center=None):
         self.coords = coords_list
         self.center = rotation_center or self.coords[0]
 
     def __contains__(self, item):
         return self.coords.__contains__(item)
+
+    def __iter__(self):
+        for coords in self.coords:
+            yield coords
 
     def __len__(self):
         return len(self.coords)

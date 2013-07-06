@@ -11,7 +11,7 @@ class Cell():
         return self.contents is None
 
     def is_full(self):
-        return not self.is_empty
+        return not self.is_empty()
 
     def empty(self):
         self.contents = None
@@ -31,12 +31,12 @@ class Cell():
         self.defence[key] = True
 
     def radar_scan(self):
-        if self.defence[radar]:
+        if self.defence["radar"]:
             return "jammed"
         return ["empty", "ship"][self.check_for_ship()]
 
     def air_strike(self):
-        if self.defence[air]:
+        if self.defence["air"]:
             return "aircraft destroyed"
         return self.hit()
 
@@ -45,7 +45,7 @@ class Cell():
             return "torpedo caught"
         if self.check_for_ship():
             return self.hit()
-        return ""
+        return "miss"
 
     def set_torpedo_net(self):
         self.contents = TorpedoNet()

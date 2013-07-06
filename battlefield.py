@@ -6,9 +6,11 @@ from errors import CannotDeployShip
 class Battlefield():
 
     def __init__(self, size, terrain_coords=[]):
+        """ Creates a battlefield, which has 4 areas,
+            each one belonging to one player. The areas are the four quadrants"""
         self.size = size
         self.ships = []
-        width, height = 2 * size.x, 2 * size.y
+        width, height = 2 * size.x + 1, 2 * size.y + 1
         self.matrix = [[Cell() for x in range(width)] for y in range(height)]
         for coords in terrain_coords:
             self[coords] = Terrain()
@@ -22,8 +24,5 @@ class Battlefield():
         self.matrix[key.y][key.x] = Cell(value)
 
     def deploy_ship(self, ship, coords, rotation):
-        if ship.can_be_deployed(self, coords, rotation):
-            ship.deploy(self, coords, rotation)
-            self.ships.append(ship)
-        else:
-            raise CannotDeployShip
+        ship.deploy(self, coords, rotation)
+        self.ships.append(ship)

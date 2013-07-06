@@ -2,6 +2,7 @@
 trash.py
 
 # Unit test / coverage reports
+.pickle
 .coverage
 .tox
 nosetests.xml
