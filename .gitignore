@@ -1,6 +1,8 @@
 *.py[cod]
 trash.py
 
+colorama-0.2.5
+
 # Unit test / coverage reports
 .pickle
 .coverage
