@@ -89,7 +89,7 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
         center = center or Vec2D(0, 0)
         result = self
         for i in range(count % 8):
-            result = result._rotate_once(center)
+            result = result.rotate_once(center)
         return result
 
     # def simple_rotate(self, angle):

@@ -24,15 +24,13 @@ def check_action(fn):
 
 class Ship:
 
-    def __init__(self, name, player, shape,
+    def __init__(self, name, shape,
                  actions=["fire_gun", "move"], misc={"fuel": 0},
                  action_shapes={}):
-        self.name, self.player, self.shape = name, player, shape
-        self.hp = len(shape)
+        self.name, self.shape, self.hp = name, shape, len(shape)
+        self.actions, self.misc = actions, misc
+        self.action_shapes = action_shapes
         self.parts = [ShipPart(self) for i in range(len(self))]
-
-        for key, value in additional.items():
-            self.__dict__[key] = value
 
     def __len__(self):
         return len(self.shape)
@@ -49,21 +47,22 @@ class Ship:
     def action_shape(self, action_name):
         pass
 
-    def can_be_deployed(self, battlefield, start_coords, rotation=0):
+    def can_be_deployed(self, battlefield, player, start_coords, rotation=0):
         if rotation % 2 != 0:
             return False
 
-        for coords in self.shape.translate(start_coords).rotate(rotation):
-            if not coords.belong_to(self.player) or battlefield[coords].is_full():
+        for coords in self.shape.transform(start_coords, rotation):
+            if not coords.belong_to(player) or battlefield[coords].is_full():
                 return False
 
         return True
 
-    def deploy(self, battlefield, coords, rotation=0):
-        if not self.can_be_deployed(battlefield, coords, rotation):
+    def deploy(self, battlefield, player, coords, rotation=0):
+        if not self.can_be_deployed(battlefield, player, coords, rotation):
             raise CannotDeployShip
 
         self.battlefield, self.coords = battlefield, coords
+        self.player = player
         self.shape.rotate(rotation)
 
         for coords, part in zip(self.parts_coords(), self.parts):
@@ -82,20 +81,23 @@ class Ship:
             self.destroy()
 
     def destroy(self):
-        pass
+        self.undeploy()
+        self.battlefield.ships.remove(self)
+        self.player.fleet.remove(self)
 
     def move(self, coords, rotation=0):
         old_coords = self.coords
         self.undeploy()
         if (self._can_be_moved()):
-            self.deploy(self.battlefield, coords, rotation)
+            self.deploy(self.battlefield, self.player, coords, rotation)
         else:
-            self.deploy(self.battlefield, old_coords)
+            self.deploy(self.battlefield, self.player, old_coords)
             raise CannotDeployShip
 
     def _can_be_moved(self, coords, rotation=0):
         return (self._move_cost(coords, rotation) <= self.fuel and
-                self.can_be_deployed(self.battlefield, coords, rotation))
+                self.can_be_deployed(self.battlefield, self.player,
+                                     coords, rotation))
 
     def _move_cost(self, coords, rotation):
         return len(self.coords - coords) + self._rotate_cost(rotation)
@@ -128,18 +130,15 @@ class Ship:
 
     @check_action
     def radar_jam(self, coords, rotation=0):
-        shape = Settings.shape("radar_jam").rotate(rotation)
-        for i in shape.translate(coords):
+        for i in Settings.shape("radar_jam").transform(coords, rotation):
             self.battlefield[i].deploy_anti("radar")
 
     @check_action
     def deploy_anti_air(self, coords, rotation=0):
-        shape = Settings.shape("torpedo_net").rotate(rotation)
-        for i in shape("anti_air").translate(coords):
+        for i in Settings.shape("anti_air").transform(coords, rotation):
             self.battlefield[i].deploy_anti("air")
 
     @check_action
     def torpedo_net(self, coords, rotation=0):
-        shape = Settings.shape("torpedo_net").rotate(rotation)
-        for i in shape.translate(coords):
+        for i in Settings.shape("torpedo_net").transform(coords, rotation):
             self.battlefield[i].set_torpedo_net()

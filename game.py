@@ -1,3 +1,6 @@
+from errors import PlayerLeft
+
+
 class Game:
 
     def __init__(self, battlefield, players, available_fleets):
@@ -8,17 +11,24 @@ class Game:
         # if player_count in range(4):
         #     self.players = [Player(i) for i in range(player_count)]
 
-    def start(self):
+    def prepare_fleets(self):
         for player in self.players:
-            player.choose_fleet(self.available_fleets)
-            player.deploy_fleet(self.battlefield)
+            try:
+                player.choose_fleet(self.available_fleets)
+                player.deploy_fleet(self.battlefield)
+            except PlayerLeft as e:
+                pass
 
+    def start(self):
         while self.is_in_progress():
             for player in self.alive_players():
-                player.make_move()
+                try:
+                    player.make_move()
+                except PlayerLeft as e:
+                    self.players.remove(e.player)
 
     def alive_players(self):
-        return [player for player in self.players if player.ships != []]
+        return [player for player in self.players if player.fleet != []]
 
     def is_in_progress(self):
         return len(set([player.team for player in self.alive_players()])) == 1

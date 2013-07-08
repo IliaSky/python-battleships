@@ -1,33 +1,34 @@
 import unittest
 from game import Game
+from player import Player
+from shape import Shape
+from ship import Ship
+from battlefield import Battlefield
+from vec2d import Vec2D
 
 
 class TestGame(unittest.TestCase):
 
     def setUp(self):
-        self.battlefield = Battlefield(4)
+        battlefield = Battlefield(Vec2D(4, 4))
+        players = [Player(1), Player(3)]
+        available_fleets = {"one ship": [Ship('a', Shape.line(3))]}
+        self.game = Game(battlefield, players, available_fleets)
 
     def tearDown(self):
-        self.battlefield = None
-
-    def test___init__(self):
-        expected = None
-        game = Game(battlefield, players, available_fleets)
+        self.game = None
 
     def test_alive_players(self):
-        expected = None
-        game = Game(battlefield, players, available_fleets)
-        self.assertEqual(expected, game.alive_players())
+        pass
 
     def test_is_in_progress(self):
-        expected = None
-        game = Game(battlefield, players, available_fleets)
-        self.assertEqual(expected, game.is_in_progress())
+        pass
+
+    def test_prepare_fleets(self):
+        pass
 
     def test_start(self):
-        expected = None
-        game = Game(battlefield, players, available_fleets)
-        self.assertEqual(expected, game.start())
+        pass
 
 if __name__ == '__main__':
     unittest.main()

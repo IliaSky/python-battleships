@@ -25,6 +25,9 @@ class Shape:
         return Shape([coords + offset for coords in self.coords],
                      self.center + offset)
 
+    def transform(self, translation, rotation):
+        return self.rotate(rotation).translate(translation)
+
     @classmethod
     def line(cls, length):
         return cls([Vec2D(0, i) for i in range(length)])

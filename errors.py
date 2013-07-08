@@ -20,3 +20,9 @@ class InsufficientAmmunition(Exception):
 
 class NonDeployedShipTriesToAct(Exception):
     pass
+
+
+class PlayerLeft(Exception):
+
+    def __init__(self, player):
+        self.player = player

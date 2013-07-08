@@ -14,9 +14,11 @@ class Settings:
                      Shape([direction for direction in Vec2D.directions()
                             if direction.square_length() == 1], Vec2D(0, 0))}
 
+    FLEETS = {}
+
     @classmethod
-    def shape(cls, action_name):
-        return cls.ACTION_SHAPES[action_name]
+    def shape(cls, action_name, rotation=0):
+        return cls.ACTION_SHAPES[action_name].rotate(rotation)
 
     @classmethod
     def resourse(cls, action_name):

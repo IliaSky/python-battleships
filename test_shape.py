@@ -6,9 +6,9 @@ from vec2d import Vec2D
 class TestShape(unittest.TestCase):
 
     def test_rotate(self):
-        self.assertTrue(False)
-        # todo - write this after fixing formula
-        # self.assertEqual(expected, shape.rotate(rotation))
+        shape = Shape([Vec2D(1, 1), Vec2D(1, 3)], Vec2D(1, 2))
+        shape2 = Shape([Vec2D(1, 1), Vec2D(1, 3)], Vec2D(1, 2))
+        self.assertEqual(set(shape2), set(shape.rotate(4)))
 
     def test_translate(self):
         shape = Shape([Vec2D(1, 1), Vec2D(1, 3)], Vec2D(1, 2))

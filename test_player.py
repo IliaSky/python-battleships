@@ -11,10 +11,7 @@ class TestPlayer(unittest.TestCase):
 
     def test_add_ally(self):
         # not yet sure about this
-        self.assertTrue(False)
-        # expected = None
-        # player = Player(battlefield_position, allies)
-        # self.assertEqual(expected, player.add_ally(ally))
+        pass
 
 if __name__ == '__main__':
     unittest.main()
