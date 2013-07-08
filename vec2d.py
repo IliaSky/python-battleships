@@ -63,14 +63,6 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
                    for i in range(size) for j in range(size)]
         return [self + offset for offset in offsets]
 
-    def are_inside(self, battlefield):
-        """ Checks if the coordinates are inside the battlefield
-            Note that the axises (with either x or y equal to zero)
-            are not considered part of the battlefield """
-        x, y = abs(self.x), abs(self.y)
-        width, height = battlefield.size.x, battlefield.size.y
-        return x <= width and y <= height and x != 0 and y != 0
-
     def rotate_once(self, center=None):
         """ This is an imitation of true rotation by thinking of concentric
             squares around the center as circles and rotating by shifting the

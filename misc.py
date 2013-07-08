@@ -10,6 +10,9 @@ class ShipPart:
         self._hit = True
         return "hit " + self.owner.name
 
+    def is_hit(self):
+        return self._hit
+
 
 class Terrain:
     pass

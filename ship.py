@@ -6,46 +6,52 @@ from settings import Settings
 def check_action(fn):
     def checked(self, *args):
         action_name = fn.__name__()
-        resourse_name = Settings.resourse(action_name)
+        resourse_name = Settings.RESOURSES[action_name]
 
-        if not hasattr(self.actions, action_name):
-            raise InvalidShipAction
-
-        if not hasattr(self.misc, resourse_name):
+        if not hasattr(self.resourses, resourse_name):
             return self.fn(*args)
 
-        if self.misc[action_name] <= 0:
+        if self.resourses[action_name] == 0:
             raise InsufficientAmmunition
 
-        self.misc[action_name] -= 1
+        self.resourses[action_name] -= 1
         return self.fn(*args)
     return checked
 
 
 class Ship:
 
-    def __init__(self, name, shape,
-                 actions=["fire_gun", "move"], misc={"fuel": 0},
-                 action_shapes={}):
+    def __init__(self, name, shape, resourses={"fuel": 10, "gun_shots": -1}):
+        """ Creates an instance of a ship.
+            By default ships have 10 fuel unless stated otherwise """
         self.name, self.shape, self.hp = name, shape, len(shape)
-        self.actions, self.misc = actions, misc
-        self.action_shapes = action_shapes
+        self.resourses = {"fuel": 10, "gun_shots": -1}
+        self.resourses.update(resourses)
         self.parts = [ShipPart(self) for i in range(len(self))]
 
     def __len__(self):
         return len(self.shape)
+
+    def __str__(self):
+        return self.name + " with " + str(self.resourses)
+
+    def __repr__(self):
+        return '<{}>'.format(str(self))
 
     def fire_gun(self, coords):
         if not hasattr(self, 'battlefield'):
             raise NonDeployedShipTriesToAct
         return self.battlefield[coords].hit()
 
-    @check_action
-    def fire_battery(self, coords, rotation=0):
-        pass
+    # def action_shape(self, action_name):
+    #     if action_name in self.action_shapes:
+    #         return self.action_shapes[action_name]
+    #     return Settings.SHAPES[action_name]
 
-    def action_shape(self, action_name):
-        pass
+    @check_action
+    def battery(self, coords, rotation=0):
+        return [self.battlefield[i].hit()
+                for i in Settings.shape("battery", coords, rotation)]
 
     def can_be_deployed(self, battlefield, player, start_coords, rotation=0):
         if rotation % 2 != 0:
@@ -82,13 +88,12 @@ class Ship:
 
     def destroy(self):
         self.undeploy()
-        self.battlefield.ships.remove(self)
         self.player.fleet.remove(self)
 
     def move(self, coords, rotation=0):
         old_coords = self.coords
         self.undeploy()
-        if (self._can_be_moved()):
+        if (self._can_be_moved(coords, rotation)):
             self.deploy(self.battlefield, self.player, coords, rotation)
         else:
             self.deploy(self.battlefield, self.player, old_coords)
@@ -109,13 +114,18 @@ class Ship:
         return (rotation / 2 % 4 - 1) % 2 + 1
 
     @check_action
-    def scan(self, coords):
-        return [self.battlefield[i].radar_scan() for i in coords.in_range(3)]
+    def radar_scan(self, coords, rotation=0):
+        return [self.battlefield[i].radar_scan()
+                for i in Settings.shape("radar_scan", coords, rotation)]
+        # return [self.battlefield[i].radar_scan() for i in coords.in_range(3)]
 
     @check_action
-    def air_strike(self, coords, direction):
-        return [self.battlefield[i].air_strike()
-                for i in coords.in_direction(direction, 3)]
+    def air_strike(self, coords, rotation=0):
+        result = []
+        for coords in Settings.shape("air_strike"):
+            result.append()
+        # return [self.battlefield[i].air_strike()
+        #         for i in coords.in_direction(direction, 3)]
 
     @check_action
     def torpedo(self, coords, direction):
@@ -130,15 +140,18 @@ class Ship:
 
     @check_action
     def radar_jam(self, coords, rotation=0):
-        for i in Settings.shape("radar_jam").transform(coords, rotation):
+        for i in Settings.shape("radar_jam", coords, rotation):
             self.battlefield[i].deploy_anti("radar")
 
     @check_action
     def deploy_anti_air(self, coords, rotation=0):
-        for i in Settings.shape("anti_air").transform(coords, rotation):
+        for i in Settings.shape("anti_air", coords, rotation):
             self.battlefield[i].deploy_anti("air")
 
     @check_action
     def torpedo_net(self, coords, rotation=0):
-        for i in Settings.shape("torpedo_net").transform(coords, rotation):
+        for i in Settings.shape("torpedo_net", coords, rotation):
             self.battlefield[i].set_torpedo_net()
+
+
+# print([Ship("a",[])])

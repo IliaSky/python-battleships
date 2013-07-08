@@ -1,6 +1,5 @@
 from cell import Cell
 from misc import Terrain
-from errors import CannotDeployShip
 
 
 class Battlefield():
@@ -24,6 +23,13 @@ class Battlefield():
         key += self.size
         self.matrix[key.y][key.x] = Cell(value)
 
-    def deploy_ship(self, ship, player, coords, rotation):
-        ship.deploy(self, player, coords, rotation)
-        self.ships.append(ship)
+    def __contains__(self, coords):
+        """ Checks if the coordinates are inside the battlefield
+            Note that the axises (with either x or y equal to zero)
+            are not considered part of the battlefield """
+        x, y = abs(coords.x), abs(coords.y)
+        width, height = self.size.x, self.size.y
+        return x <= width and y <= height and x != 0 and y != 0
+
+    def print(self):
+        pass

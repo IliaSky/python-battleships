@@ -28,10 +28,10 @@ class Shape:
     def transform(self, translation, rotation):
         return self.rotate(rotation).translate(translation)
 
-    @classmethod
-    def line(cls, length):
-        return cls([Vec2D(0, i) for i in range(length)])
 
-    @classmethod
-    def square(cls, size):
-        return cls([Vec2D(i, j) for i in range(size) for j in range(size)])
+def line(length):
+    return Shape([Vec2D(0, i) for i in range(length)])
+
+
+def square(size):
+    return Shape([Vec2D(i, j) for i in range(size) for j in range(size)])
