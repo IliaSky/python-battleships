@@ -1,7 +1,11 @@
+import re
+
+
 from errors import InvalidPlayerPosition, PlayerLeft
 from settings import Settings
 from fleets import Fleets
-import re
+from vec2d import Vec2D
+from ui.printer import battlefield_print
 
 
 class Player:
@@ -32,8 +36,8 @@ class Player:
             player_input = input(self.name + ": " + message)
             if player_input == "exit" or player_input == "surrender":
                 raise PlayerLeft(self)
-            if condition is str:
-                valid = re.match(condition, player_input, re.I)
+            if type(condition) is str:
+                valid = re.match(condition, player_input, re.I) is not None
             else:
                 valid = player_input in condition
         return player_input
@@ -42,15 +46,25 @@ class Player:
         print(message)
 
     def choose_fleet(self):
-        self.cout("Choose your fleet. Your options are: {}".format(Fleets.ALL.keys()))
-        self.fleet = Fleets.ALL[self.cin("Choose your fleet: ", Fleets.ALL.keys())]
+        # self.cout("Choose your fleet. Your options are: {}".format(Fleets.ALL.keys()))
+        # self.fleet = Fleets.ALL[self.cin("Choose your fleet: ", Fleets.ALL.keys())]
+        self.fleet = Fleets.ALL["hidden"]
+        for i, ship in enumerate(self.fleet):
+            ship.id = i
 
     def deploy_fleet(self, battlefield):
         for ship in self.fleet:
-            coords = self.cin("Enter ship coordinates:")
-            while not ship.can_be_deployed(battlefield, self, coords):
+            battlefield_print(battlefield, Vec2D(0, 0))
+            coords = Vec2D.parse(self.cin("Enter ship coordinates: (x, y)",
+                                          r'\(?(-?[0-9]*) ?,? ?(-?[0-9]*)\)?'))
+            rotation = int(self.cin("Enter rotation (0-7)", r'-?[0-7]'))
+            while not ship.can_be_deployed(battlefield, self, coords, rotation):
                 self.cout("Invalid ship coords and rotation combo")
-                coords = self.cin("Enter ship coordinates:")
+                coords = Vec2D.parse(self.cin("Enter ship coordinates: (x, y)",
+                                              r'\(?(-?[0-9]*) ?,? ?(-?[0-9]*)\)?'))
+                rotation = int(self.cin("Enter rotation (0-7)", r'-?[0-7]'))
+            ship.deploy(battlefield, self, coords, rotation)
+
 
     # def choose_and_deploy_fleet(self, battlefield):
     #     self.choose_fleet()

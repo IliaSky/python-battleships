@@ -1,10 +1,13 @@
+import time
+import traceback
 from random import shuffle
+
+
 from settings import Settings
 from player import Player
 from battlefield import Battlefield
 from errors import PlayerLeft
-import time
-import traceback
+# from ui.printer import battlefield_print
 
 
 class Game:
@@ -17,6 +20,7 @@ class Game:
 
             self.prepare_fleets()
             self.ask_for_alliances()
+            # battlefield_print(self.battlefield)
         except Exception as e:
             traceback.print_exc()
         finally:
@@ -27,7 +31,7 @@ class Game:
     def _get_player_count(cls):
         player_count = None
         while player_count not in [2, 3, 4]:
-            player_count = input("How many players will play? (2, 3 or 4) ")
+            player_count = int(input("How many players will play? (2, 3 or 4) "))
         return player_count
 
     def init_players(cls, player_count):
@@ -81,12 +85,12 @@ class Game:
 
 # def match(regex):
 #     return
-from vec2d import Vec2D
-import re
-print(type(Battlefield(Settings.BATTLEFIELD_SIZE)))
-a = re.match(r"<class '(?:.*)\.(.*)'>", str(type(Vec2D(3, 3)))).groups()[0]
-print(a)
-print(a)
-print(a)
-# if __name__ == '__main__':
-#     Game()
+# from vec2d import Vec2D
+# import re
+# print(type(Battlefield(Settings.BATTLEFIELD_SIZE)))
+# a = re.match(r"<class '(?:.*)\.(.*)'>", str(type(Vec2D(3, 3)))).groups()[0]
+# print(a)
+# print(a)
+# print(a)
+if __name__ == '__main__':
+    Game()

@@ -2,16 +2,13 @@ class ShipPart:
 
     def __init__(self, owner):
         self.owner = owner
-        self._hit = False
+        self.is_hit = False
 
     def hit(self):
-        if not self._hit:
+        if not self.is_hit:
             self.owner.hit()
-        self._hit = True
+        self.is_hit = True
         return "hit " + self.owner.name
-
-    def is_hit(self):
-        return self._hit
 
 
 class Terrain:

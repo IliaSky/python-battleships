@@ -1,6 +1,7 @@
 from collections import namedtuple
 from errors import DirectionNotSupported
 from fractions import gcd
+from re import match
 
 
 class Vec2D(namedtuple('Vec2D', 'x y')):
@@ -98,6 +99,11 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
     def directions(cls):
         return [Vec2D(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1]
                 if i != 0 or j != 0]
+
+    @classmethod
+    def parse(cls, string):
+        m = match(r'\(?(-?[0-9]*) ?,? ?(-?[0-9]*)\)?', string)
+        return Vec2D(int(m.groups()[0]), int(m.groups()[1]))
 
     # @classmethod
     # def direction_from_int(self, i):

@@ -20,6 +20,11 @@ class Fleets:
         Ship("Carrier", line(5), {"fuel": 30}),
     ]
 
+    HIDDEN_FLEET = [
+        Ship("Boat", line(1), {"fuel": 15}),
+        Ship("Submarine", line(2), {"fuel": 15})
+    ]
+
     NORMAL_FLEET = [
         Ship("Boat", line(2), {"torpedos": 2}),
         Ship("Submarine", line(3), {"torpedos": 3, "torpedos_nets": 8}),
@@ -63,6 +68,7 @@ class Fleets:
 
     ALL = {
         "basic": BASIC_FLEET,
+        "hidden": HIDDEN_FLEET,
         "mobile": MOBILE_FLEET,
         "normal": NORMAL_FLEET,
         "underwater": UNDERWATER_FLEET,
