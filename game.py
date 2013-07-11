@@ -7,24 +7,34 @@ from settings import Settings
 from player import Player
 from battlefield import Battlefield
 from errors import PlayerLeft
-# from ui.printer import battlefield_print
+from ui.printer import battlefield_print
 
 
 class Game:
 
     def __init__(self):
         try:
-            player_count = self._get_player_count()
+            # player_count = self._get_player_count()
+            player_count = 2
             self.players = self.init_players(player_count)
             self.battlefield = Battlefield(Settings.BATTLEFIELD_SIZE)
 
             self.prepare_fleets()
-            self.ask_for_alliances()
-            # battlefield_print(self.battlefield)
+            # self.ask_for_alliances()
+            self.players[1].make_move()
+            battlefield_print(self.battlefield)
+            self.players[0].make_move()
+            battlefield_print(self.battlefield)
+            self.players[1].make_move()
+            battlefield_print(self.battlefield)
+            self.players[0].make_move()
+            battlefield_print(self.battlefield)
+            # self.start()
+
         except Exception as e:
             traceback.print_exc()
         finally:
-            time.sleep(1000)
+            time.sleep(1)
         # if player_count in range(4):
         #     self.players = [Player(i) for i in range(player_count)]
 
@@ -35,9 +45,9 @@ class Game:
         return player_count
 
     def init_players(cls, player_count):
-        player_positions = [i + 1 for i in range(player_count)]
+        player_positions = [i + 1 for i in range(4)]
         shuffle(player_positions)
-        players = [Player(i) for i in player_positions]
+        players = [Player(i) for i in player_positions[:player_count]]
         print("You will be " + str(players))
         return players
 
@@ -50,7 +60,8 @@ class Game:
         while self.is_in_progress():
             for player in self.alive_players():
                 try:
-                    player.make_move()
+                    for action in range(Settings.ACTIONS_PER_TURN):
+                        player.make_move()
                 except PlayerLeft as e:
                     self.players.remove(e.player)
 
@@ -58,12 +69,13 @@ class Game:
         return [player for player in self.players if player.fleet != []]
 
     def is_in_progress(self):
-        return len(set([player.team for player in self.alive_players()])) == 1
+        # return len(set([player.team for player in self.alive_players()])) == 1
+        return len(self.alive_players()) == 1
 
     def ask_for_alliances(self):
         for player in self.players:
             if (player.cin("Will you team up? (y|n)", "(y|n)") == 'y'):
-                optional_allies = [other.quadrant for other in self.players
+                optional_allies = [other.position for other in self.players
                                    if other != self]
                 ally = player.cin("Ok. With: (1..4)", optional_allies)
                 player.add_ally(ally)

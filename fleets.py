@@ -24,6 +24,10 @@ class Fleets:
         Ship("Boat", line(1), {"fuel": 15}),
         Ship("Submarine", line(2), {"fuel": 15})
     ]
+    SPECIAL_FLEET = [
+        Ship("Boat", line(3), {"fuel": 15, "scans": -1, "jams": -1,
+                               "battery": -1, "anti_air": -1})
+    ]
 
     NORMAL_FLEET = [
         Ship("Boat", line(2), {"torpedos": 2}),
@@ -69,6 +73,7 @@ class Fleets:
     ALL = {
         "basic": BASIC_FLEET,
         "hidden": HIDDEN_FLEET,
+        "spec": SPECIAL_FLEET,
         "mobile": MOBILE_FLEET,
         "normal": NORMAL_FLEET,
         "underwater": UNDERWATER_FLEET,

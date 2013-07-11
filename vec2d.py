@@ -1,7 +1,9 @@
 from collections import namedtuple
-from errors import DirectionNotSupported
 from fractions import gcd
 from re import match
+
+
+from errors import DirectionNotSupported, InvalidCoordinatesString
 
 
 class Vec2D(namedtuple('Vec2D', 'x y')):
@@ -102,7 +104,10 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
 
     @classmethod
     def parse(cls, string):
-        m = match(r'\(?(-?[0-9]*) ?,? ?(-?[0-9]*)\)?', string)
+        # m = match(r'\(?(-?[0-9]*),? (-?[0-9]*)\)?', string)
+        m = match(r'(-?[0-9]) (-?[0-9])', string)
+        if m is None:
+            raise InvalidCoordinatesString(string)
         return Vec2D(int(m.groups()[0]), int(m.groups()[1]))
 
     # @classmethod
@@ -111,3 +116,4 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
     #         4 (5) 6 | 5 => (0, 0)
     #         7  8  9 | 9 => (1, 1)"""
     #     return Vec2D((i - 1) % 3 - 1, (i - 1) / 3 - 1)
+# print(Vec2D.parse("111"))

@@ -1,6 +1,7 @@
 from re import match
 from colorama import init, Fore, Back, Style
 from time import sleep
+import os
 
 
 from ui._getch import getch
@@ -15,7 +16,7 @@ def my_print(style, text=' '):
 
 
 def print_cell(cell, mouse_here=False):
-    cls = match(r"<.*'.*?\.?(.*)'>", str(type(cell.contents))).groups()[0]
+    cls = match(r"<.*'.*?\.?([^\.]*)'>", str(type(cell.contents))).groups()[0]
     anti = cell.defence
     bg = [Back.BLACK, Back.GREEN, Back.BLUE, Back.CYAN][anti['air'] + 2 * anti['radar']]
     if mouse_here:
@@ -27,13 +28,14 @@ def print_cell(cell, mouse_here=False):
         my_print(bg, ' ')
     if cls == 'ShipPart':
         # print('x' if obj.is_hit() else obj.id)
-        my_print(bg + Fore.RED * cell.contents.is_hit, 'X')
+        my_print(bg + Fore.RED * cell.contents.is_hit, str(cell.contents.owner.id + 1))
     if cls == 'TorpedoNet':
         my_print(bg, 'n')
 
 
-def battlefield_print(battlefield, mouse_coords):
-    for y in range(battlefield.size.y * 2 + 1):
+def battlefield_print(battlefield, mouse_coords=Vec2D(0, 0)):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    for y in range(battlefield.size.y * 2 + 1)[::-1]:
         for x in range(battlefield.size.x * 2 + 1):
             coords = Vec2D(x, y) - battlefield.size
             mouse_here = (mouse_coords == coords)

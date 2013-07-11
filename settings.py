@@ -20,6 +20,8 @@ class Settings:
     QUADRANT_NAMES = ["(0) Border", "(1) Empire", "(2) Rebellion",
                       "(3) Republic", "(4) Pirates"]
 
+    ACTIONS_PER_TURN = 2
+
     @classmethod
     def shape(cls, action_name, translation=Vec2D(0, 0), rotation=0):
         return cls.SHAPES[action_name].transform(translation, rotation)

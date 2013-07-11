@@ -5,17 +5,18 @@ from settings import Settings
 
 def check_action(fn):
     def checked(self, *args):
-        action_name = fn.__name__()
+        action_name = fn.__name__
+        print(action_name)
         resourse_name = Settings.RESOURSES[action_name]
 
         if not hasattr(self.resourses, resourse_name):
-            return self.fn(*args)
+            return fn(self, *args)
 
         if self.resourses[action_name] == 0:
             raise InsufficientAmmunition
 
         self.resourses[action_name] -= 1
-        return self.fn(*args)
+        return fn(self, *args)
     return checked
 
 
@@ -100,7 +101,7 @@ class Ship:
             raise CannotDeployShip
 
     def _can_be_moved(self, coords, rotation=0):
-        return (self._move_cost(coords, rotation) <= self.fuel and
+        return (self._move_cost(coords, rotation) <= self.resourses['fuel'] and
                 self.can_be_deployed(self.battlefield, self.player,
                                      coords, rotation))
 
