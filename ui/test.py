@@ -71,3 +71,20 @@ print_cell(a(), True)
 #      windll.kernel32.SetConsoleTextAttribute(stdout_handle, color)
 #      print("%X --> %s" % (color, "Have a fine day!"))
 #      input("Press Enter to go on ... ")
+
+
+# def function():
+#     print('Lorem')
+
+    # cls = match(r".*\.(.*)'>", str(type(obj))).groups()[1]
+    # cls = search(r"(?<=\.)(.*)(?='>)", str(type(obj))).groups()[0]
+
+
+# q=not match(r"<.*'.*\.?(.*)'>", str(type(None))).groups()[0] == 'NoneType'
+# # print(match(r".*'(.*)'>", str(type(None))).groups()[0] == 'NoneType')
+# print(Fore.RED*False + 'some red text')
+# print(Back.GREEN + 'and with a green background')
+# print(Style.DIM + 'and in dim text')
+# print(Style.RESET_ALL+"sas"+Back.GREEN + Style.RESET_ALL+"sas"+Back.GREEN + Fore.RED + Style.RESET_ALL+"sas")
+# print('back to normal now')
+# sleep(10)

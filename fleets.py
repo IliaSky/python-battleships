@@ -23,6 +23,7 @@ class Fleets:
         ("PT Boat", line(1), {"fuel": 15}),
         ("Submarine", line(2), {"fuel": 15})
     ]
+
     SPECIAL_FLEET = [
         ("PT Boat", line(3), {"fuel": 15, "scans": 1, "jams": -1,
                               "battery_shots": -1, "anti_air": -1,
@@ -55,15 +56,6 @@ class Fleets:
         ("Carrier", line(4), {"aircrafts": 2}),
         ("War Carrier", line(5), {"aircrafts": 3})
     ]
-
-    # UNUSUAL_FLEET = [
-    #     ("PT Boat", line(2), {"torpedos": 3}),
-    #     ("Submarine", line(3), set("torpedo_net"),
-    #      {"torpedos": 4, "torpedos_nets": 8}),
-    #     ("Defender", line(3), {"anti_air": -1, "radar_jam": -1, "scans": 3}),
-    #     ("Carrier 1", line(4), {"aircrafts": 2}),
-    #     ("Carrier 2", line(4), {"aircrafts": 4})
-    # ]
 
     BATTERY_FLEET = [
         ("PT Boat", line(2), {"fuel": 40}),

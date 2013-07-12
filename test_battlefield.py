@@ -12,7 +12,7 @@ class TestBattlefield(unittest.TestCase):
         battlefield = Battlefield(Vec2D(3, 3))
         must_be_true(Vec2D(2, 3)in battlefield)
         must_be_true(Vec2D(-3, 1) in battlefield)
-        must_be_false(Vec2D(0, 0) in battlefield)
+        must_be_true(Vec2D(0, 0) in battlefield)
         must_be_false(Vec2D(3, 7) in battlefield)
 
 

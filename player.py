@@ -2,7 +2,7 @@ import re
 import traceback
 
 
-from errors import InvalidCommand, PlayerLeft
+from errors import InvalidCommand, InvalidPlayerPosition, PlayerLeft
 from settings import Settings
 from fleets import Fleets
 from ship import Ship
@@ -48,11 +48,9 @@ class Player:
         print(message)
 
     def choose_fleet(self):
-        # self.cout("Choose your fleet. Your options are: {}".format(Fleets.ALL.keys()))
-        # self.fleet = Fleets.ALL[self.cin("Choose your fleet: ", Fleets.ALL.keys())]
-        self.fleet = [Ship(*args) for args in Fleets.ALL["spec"]]
-        for ship in self.fleet:
-            ship.id = Settings.SHIP_NAME_ABBR[ship.name]
+        self.cout("Choose your fleet. Your options are: {}".format(Fleets.ALL.keys()))
+        fleet_name = self.cin("Choose your fleet: ", Fleets.ALL.keys())
+        self.fleet = [Ship(*args) for args in Fleets.ALL[fleet_name]]
 
     def deploy_fleet(self, battlefield):
         for ship in self.fleet:

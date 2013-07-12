@@ -11,25 +11,13 @@ from ui.printer import battlefield_print
 class Game:
 
     def __init__(self):
-        # player_count = self._get_player_count()
-        player_count = 2
+        player_count = self._get_player_count()
         self.players = self.init_players(player_count)
         self.battlefield = Battlefield(Settings.BATTLEFIELD_SIZE)
 
         self.prepare_fleets()
         # self.ask_for_alliances()
-        # self.players[1].make_move()
-        # battlefield_print(self.battlefield)
-        # self.players[0].make_move()
-        # battlefield_print(self.battlefield)
-        # self.players[1].make_move()
-        # battlefield_print(self.battlefield)
-        # self.players[0].make_move()
-        # battlefield_print(self.battlefield)
         self.start()
-
-        # if player_count in range(4):
-        #     self.players = [Player(i) for i in range(player_count)]
 
     def _get_player_count(cls):
         player_count = None
@@ -60,7 +48,7 @@ class Game:
                 except PlayerLeft as e:
                     self.players.remove(e.player)
                     if not self.is_in_progress():
-                        print(self.alive_players()[0].name + " won!")
+                        print(str(self.alive_players()[0]) + " won!")
                         break
 
     def alive_players(self):
@@ -79,28 +67,5 @@ class Game:
                 player.add_ally(ally)
 
 
-# def matches(regex):
-#     def matcher(f):
-#         def decorated(*args):
-#             for (i, (arg, t)) in enumerate(zip(args, types)):
-#                 if not isinstance(arg, t):
-#                     raise TypeError("Argument #{0} of '{1}' should \
-#                        have been of type {2}".format(i,
-#                                            f.__name__,
-#                                            t.__name__))
-#                   #TODO: more complex checks
-#                 return f(*args)
-#             return decorated
-#     return matcher
-
-# def match(regex):
-#     return
-# from vec2d import Vec2D
-# import re
-# print(type(Battlefield(Settings.BATTLEFIELD_SIZE)))
-# a = re.match(r"<class '(?:.*)\.(.*)'>", str(type(Vec2D(3, 3)))).groups()[0]
-# print(a)
-# print(a)
-# print(a)
 if __name__ == '__main__':
     Game()

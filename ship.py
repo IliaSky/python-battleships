@@ -78,7 +78,7 @@ class Ship:
 
         self.battlefield, self.coords = battlefield, coords
         self.player = player
-        self.shape.rotate(rotation)
+        self.shape = self.shape.rotate(rotation)
 
         for coords, part in zip(self.parts_coords(), self.parts):
             battlefield[coords] = part

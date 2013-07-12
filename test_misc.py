@@ -22,7 +22,7 @@ class TestShipPart(unittest.TestCase):
     def test___init__(self):
         ship_part = ShipPart(5)
         must_be_equal(5, ship_part.owner)
-        must_be_false(ship_part._hit)
+        must_be_false(ship_part.is_hit)
 
     def test_hit(self):
         must_be_equal("hit X-Wing", self.ship_part.hit())

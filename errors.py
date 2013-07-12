@@ -31,8 +31,8 @@ class InvalidCoordinates(Exception):
 #     pass
 
 
-# class NonDeployedShipTriesToAct(Exception):
-#     pass
+class NonDeployedShipTriesToAct(Exception):
+    pass
 
 
 # class InvalidShipId(Exception):

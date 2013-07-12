@@ -78,30 +78,25 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
             coordinates in the squares a value equal to the 'square radius' """
         center = center or Vec2D(0, 0)
         x, y, r = (self - center).x, (self - center).y, len(self - center)
-        move_x = (x != r) * (y == -r) - (x != -r) * (y == r)
-        move_y = (y != r) * (x == r) - (y != -r) * (x == -r)
-        return center + Vec2D(move_x, move_y) * r
-        # if y == -r and x != r:
-        #     y += x
-        #     x += r
-        #     # return center + Vec2D(min(r, x + r), max(0, x))
-        # elif x == r and y != r:
-        #     # y += x * (x > 0)
-        #     x = min(r, r - y)
-        #     y = min(r, r + y)
-        #     # return center + Vec2D(-max(0, y), min(r, x + r))
-        # elif y == r and x != -r:
-        #     y = min(r, r + x)
-        #     x = max(-r, x - r)
-        #     # return center + Vec2D(max(-r, x - r), -min(0, x))
-        # elif x == -r and y != -r:
+        if y == -r and x != r:
+            y += x
+            x += r
+        elif x == r and y != r:
+            x -= y
+            y += r
+        elif y == r and x != -r:
+            y += x
+            x -= r
+        elif x == -r and y != -r:
+            x -= y
+            y -= r
+        return center + Vec2D(x, y).between(-r, r)
+        # move_x = (x != r) * (y == -r) - (x != -r) * (y == r)
+        # move_y = (y != r) * (x == r) - (y != -r) * (x == -r)
+        # return center + Vec2D(move_x, move_y) * r
 
-        #     # return center + Vec2D(max(-r), max(0, x))
-        # return center + offset.between(-r, r)
-        # todo - fix formula
-
-    # def between(self, a, b):
-    #     return Vec2D(max(a, min(b, self.x)), max(a, min(b, self.y)))
+    def between(self, a, b):
+        return Vec2D(max(a, min(b, self.x)), max(a, min(b, self.y)))
 
     def rotate(self, count=1, center=None):
         """ This method does something similar to rotation (tweaked for only

@@ -5,6 +5,7 @@ import os
 
 
 from vec2d import Vec2D
+from settings import Settings
 from ui._getch import getch
 
 
@@ -27,8 +28,8 @@ def print_cell(cell, mouse_here=False):
     if cls == 'NoneType':
         my_print(bg, ' ')
     if cls == 'ShipPart':
-        # print('x' if obj.is_hit() else obj.id)
-        my_print(bg + Fore.RED * cell.contents.is_hit, cell.contents.owner.id)
+        my_print(bg + Fore.RED * cell.contents.is_hit,
+                 Settings.SHIP_NAME_ABBR[cell.contents.owner.name])
     if cls == 'TorpedoNet':
         my_print(bg, 'n')
 
@@ -45,20 +46,4 @@ def battlefield_print(battlefield, mouse_coords=Vec2D(0, 0)):
                 print_cell(battlefield[coords], mouse_here)
         print('')
 
-
-def function():
-    print('Lorem')
-
-    # cls = match(r".*\.(.*)'>", str(type(obj))).groups()[1]
-    # cls = search(r"(?<=\.)(.*)(?='>)", str(type(obj))).groups()[0]
-
-
-# q=not match(r"<.*'.*\.?(.*)'>", str(type(None))).groups()[0] == 'NoneType'
-# # print(match(r".*'(.*)'>", str(type(None))).groups()[0] == 'NoneType')
-# print(Fore.RED*False + 'some red text')
-# print(Back.GREEN + 'and with a green background')
-# print(Style.DIM + 'and in dim text')
-# print(Style.RESET_ALL+"sas"+Back.GREEN + Style.RESET_ALL+"sas"+Back.GREEN + Fore.RED + Style.RESET_ALL+"sas")
-# print('back to normal now')
-# sleep(10)
 
