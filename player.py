@@ -2,7 +2,7 @@ import re
 import traceback
 
 
-from errors import *
+from errors import InvalidCommand, PlayerLeft
 from settings import Settings
 from fleets import Fleets
 from ship import Ship
@@ -88,9 +88,8 @@ class Player:
 
     def execute_command(self, ship, action, target):
         if action == 'fire_gun':
-            ship.__getattribute__(action)(target)
-        else:
-            ship.__getattribute__(action)(*target)
+            return ship.__getattribute__(action)(target)
+        return ship.__getattribute__(action)(*target)
 
     def parse_command(self, command):
         # regex = r'([0-9]+) ([_a-z]+) \(?(-?[0-9]+,? -?[0-9]+)\)?(?: (.*))?'
@@ -112,7 +111,10 @@ class Player:
         if action == 'fire_gun':
             target = coords
         elif action == 'torpedo':
-            target = (coords, Vec2D.parse(m[3]))
+            try:
+                target = (coords, Vec2D.parse(m[3]))
+            except TypeError:
+                raise InvalidCommand('Invalid direction format')
         else:
             target = (coords, int(m[3] or 0))
 

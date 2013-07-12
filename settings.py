@@ -47,7 +47,3 @@ class Settings:
 #     @classmethod
 #     def ship(cls, ship_name):
 #         return [ship for ship in cls.NORMAL_SHIPS if ship.name == ship_name][0]
-
-
-# def _easy_ship(name, length, resourses={"fuel": 10}):
-#     pass

@@ -21,22 +21,20 @@ class TestShip(unittest.TestCase):
         self.sea, self.ship, self.ship2 = None, None, None
 
     def test_can_be_deployed(self):
-        is_false, is_true = must_be_false, must_be_true
-        ship, ship2 = self.ship, self.ship2
+        ship, ship2, sea, sea2 = self.ship, self.ship2, self.sea, self.sea2
 
         # cannot be deployed on enemy teritory
-        is_false(ship.can_be_deployed(self.sea, Player(1), Vec2D(-1, 1)))
+        must_be_false(ship.can_be_deployed(sea, Player(1), Vec2D(-1, 1)))
 
         # can be deployed on own teritory
-        is_true(ship.can_be_deployed(self.sea, Player(1), Vec2D(1, 1)))
-        is_true(ship2.can_be_deployed(self.sea, Player(3), Vec2D(-3, -3)))
+        must_be_true(ship.can_be_deployed(sea, Player(1), Vec2D(1, 1)))
+        must_be_true(ship2.can_be_deployed(sea, Player(3), Vec2D(-3, -3)))
 
         # cannot be deployed on terrain
-        is_false(ship.can_be_deployed(self.sea2, Player(1), Vec2D(1, 1)))
+        must_be_false(ship.can_be_deployed(sea2, Player(1), Vec2D(1, 1)))
 
     def test_fire_gun(self):
-        must_raise(NonDeployedShipTriesToAct,
-                          self.ship.fire_gun, Vec2D(3, 3))
+        must_raise(NonDeployedShipTriesToAct, self.ship.fire_gun, Vec2D(3, 3))
         self.ship.deploy(self.sea, Player(1), Vec2D(1, 1))
         self.ship2.deploy(self.sea, Player(3), Vec2D(-3, -3))
         must_be_equal("miss", self.ship.fire_gun(Vec2D(-4, -4)))

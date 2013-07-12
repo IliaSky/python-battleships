@@ -54,8 +54,9 @@ class Game:
             for player in self.alive_players():
                 try:
                     for action in range(Settings.ACTIONS_PER_TURN):
-                        player.make_move()
+                        move_result = player.make_move()
                         battlefield_print(self.battlefield)
+                        print(str(move_result))
                 except PlayerLeft as e:
                     self.players.remove(e.player)
                     if not self.is_in_progress():

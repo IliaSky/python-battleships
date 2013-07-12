@@ -33,7 +33,7 @@ class Battlefield():
         if isinstance(element, Vec2D):
             x, y = abs(element.x), abs(element.y)
             width, height = self.size.x, self.size.y
-            return x <= width and y <= height and x != 0 and y != 0
+            return x <= width and y <= height
 
         if isinstance(element, Shape):
             for coords in element.coords:

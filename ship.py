@@ -150,7 +150,7 @@ class Ship:
         while coords in self.battlefield:
             coords += direction
             result[coords] = self.battlefield[coords].torpedo_hit()
-            if result[coords] not in ["miss", "torpedo caught"]:
+            if result[coords] != "miss":
                 break
         return result
 
