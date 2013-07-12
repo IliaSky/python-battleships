@@ -3,7 +3,7 @@ from fractions import gcd
 from re import match
 
 
-from errors import DirectionNotSupported, InvalidCoordinatesString
+from errors import DirectionNotSupported, InvalidCoordinates
 
 
 class Vec2D(namedtuple('Vec2D', 'x y')):
@@ -107,7 +107,7 @@ class Vec2D(namedtuple('Vec2D', 'x y')):
         # m = match(r'\(?(-?[0-9]*),? (-?[0-9]*)\)?', string)
         m = match(r'(-?[0-9]) (-?[0-9])', string)
         if m is None:
-            raise InvalidCoordinatesString(string)
+            raise InvalidCoordinates(string)
         return Vec2D(int(m.groups()[0]), int(m.groups()[1]))
 
     # @classmethod

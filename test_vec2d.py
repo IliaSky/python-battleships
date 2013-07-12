@@ -28,13 +28,6 @@ class TestVec2D(unittest.TestCase):
     def test___sub__(self):
         must_be_equal(Vec2D(1, -4), Vec2D(3, 3).__sub__(Vec2D(2, 7)))
 
-    def test_are_inside(self):
-        battlefield = Battlefield(Vec2D(3, 3))
-        must_be_true(Vec2D(2, 3).are_inside(battlefield))
-        must_be_true(Vec2D(-3, 1).are_inside(battlefield))
-        must_be_false(Vec2D(0, 0).are_inside(battlefield))
-        must_be_false(Vec2D(3, 7).are_inside(battlefield))
-
     def test_quadrant(self):
         must_be_equal(0, Vec2D(1, 0).quadrant())
         must_be_equal(0, Vec2D(0, -1).quadrant())
@@ -70,7 +63,7 @@ class TestVec2D(unittest.TestCase):
         must_be_equal(square_3, Vec2D(3, 3).in_range(3))
 
     def test_rotate_once(self):
-        # todo - some more test cases here after fixing formula
+        # todo - some more tests here
         must_be_equal(Vec2D(0, 3), Vec2D(3, 3).rotate_once())
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ class Shape:
 
 
 def line(length):
-    return Shape([Vec2D(0, i) for i in range(length)])
+    return Shape([Vec2D(i, 0) for i in range(length)])
 
 
 def square(size):

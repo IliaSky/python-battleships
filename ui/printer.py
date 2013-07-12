@@ -4,8 +4,8 @@ from time import sleep
 import os
 
 
-from ui._getch import getch
 from vec2d import Vec2D
+from ui._getch import getch
 
 
 init(autoreset=True)
@@ -28,7 +28,7 @@ def print_cell(cell, mouse_here=False):
         my_print(bg, ' ')
     if cls == 'ShipPart':
         # print('x' if obj.is_hit() else obj.id)
-        my_print(bg + Fore.RED * cell.contents.is_hit, str(cell.contents.owner.id + 1))
+        my_print(bg + Fore.RED * cell.contents.is_hit, cell.contents.owner.id)
     if cls == 'TorpedoNet':
         my_print(bg, 'n')
 
@@ -40,7 +40,7 @@ def battlefield_print(battlefield, mouse_coords=Vec2D(0, 0)):
             coords = Vec2D(x, y) - battlefield.size
             mouse_here = (mouse_coords == coords)
             if (coords.x == 0 or coords.y == 0):
-                my_print([Back.BLUE, Back.MAGENTA][mouse_here])
+                my_print([Back.WHITE, Back.MAGENTA][mouse_here])
             else:
                 print_cell(battlefield[coords], mouse_here)
         print('')

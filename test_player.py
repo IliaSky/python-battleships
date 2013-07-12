@@ -1,4 +1,6 @@
 import unittest
+
+
 from test_helper import must_raise
 from player import Player
 from errors import InvalidPlayerPosition

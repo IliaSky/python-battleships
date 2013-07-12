@@ -1,5 +1,7 @@
 from cell import Cell
 from misc import Terrain
+from vec2d import Vec2D
+from shape import Shape
 
 
 class Battlefield():
@@ -23,13 +25,18 @@ class Battlefield():
         key += self.size
         self.matrix[key.y][key.x] = Cell(value)
 
-    def __contains__(self, coords):
+    def __contains__(self, element):
         """ Checks if the coordinates are inside the battlefield
             Note that the axises (with either x or y equal to zero)
             are not considered part of the battlefield """
-        x, y = abs(coords.x), abs(coords.y)
-        width, height = self.size.x, self.size.y
-        return x <= width and y <= height and x != 0 and y != 0
 
-    def print(self):
-        pass
+        if isinstance(element, Vec2D):
+            x, y = abs(element.x), abs(element.y)
+            width, height = self.size.x, self.size.y
+            return x <= width and y <= height and x != 0 and y != 0
+
+        if isinstance(element, Shape):
+            for coords in element.coords:
+                if coords not in self:
+                    return False
+            return True

@@ -22,6 +22,18 @@ class Settings:
 
     ACTIONS_PER_TURN = 2
 
+    SHIP_NAME_ABBR = {
+        "PT Boat": "P",
+        "Submarine": "S",
+        "Uber Submarine": "U",
+        "Destroyer": "D",
+        "Battleship": "B",
+        "Battlestation": "T",
+        "Carrier": "C",
+        "War Carrier": "W",
+        "Defender": "F"
+    }
+
     @classmethod
     def shape(cls, action_name, translation=Vec2D(0, 0), rotation=0):
         return cls.SHAPES[action_name].transform(translation, rotation)

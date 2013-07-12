@@ -6,16 +6,26 @@ from settings import Settings
 def check_action(fn):
     def checked(self, *args):
         action_name = fn.__name__
-        print(action_name)
         resourse_name = Settings.RESOURSES[action_name]
 
-        if not hasattr(self.resourses, resourse_name):
+        if not hasattr(self, 'battlefield'):
+            raise NonDeployedShipTriesToAct
+
+        if resourse_name not in self.resourses.keys():
+            print(resourse_name)
+            print(self.resourses.keys())
+            raise InvalidCommand('Chosen ship cannot perform this action')
+
+        if self.resourses[resourse_name] == 0:
+            raise InvalidCommand('Chosen ship does not have enough resources')
+
+        # if not Settings.shape(action_name) in self.battlefield:
+        #     raise InvalidCommand('Chosen coords are outside the battlefield')
+
+        if self.resourses[resourse_name] == -1:
             return fn(self, *args)
 
-        if self.resourses[action_name] == 0:
-            raise InsufficientAmmunition
-
-        self.resourses[action_name] -= 1
+        self.resourses[resourse_name] -= 1
         return fn(self, *args)
     return checked
 
@@ -39,9 +49,8 @@ class Ship:
     def __repr__(self):
         return '<{}>'.format(str(self))
 
+    @check_action
     def fire_gun(self, coords):
-        if not hasattr(self, 'battlefield'):
-            raise NonDeployedShipTriesToAct
         return self.battlefield[coords].hit()
 
     # def action_shape(self, action_name):
@@ -61,12 +70,11 @@ class Ship:
         for coords in self.shape.transform(start_coords, rotation):
             if not coords.belong_to(player) or battlefield[coords].is_full():
                 return False
-
         return True
 
     def deploy(self, battlefield, player, coords, rotation=0):
         if not self.can_be_deployed(battlefield, player, coords, rotation):
-            raise CannotDeployShip
+            raise InvalidCommand('Chosen ship cannot be deployed there')
 
         self.battlefield, self.coords = battlefield, coords
         self.player = player
@@ -122,22 +130,29 @@ class Ship:
 
     @check_action
     def air_strike(self, coords, rotation=0):
-        result = []
+        result = {}
         for coords in Settings.shape("air_strike"):
-            result.append()
+            result[coords] = self.battlefield[coords].air_strike()
+            if result[coords] == "aircraft destroyed":
+                break
+
+        # aircraft isn't lost if it wasnt destroyed unlike other resources
+        if "aircraft destroyed" not in result.values():
+            self.resourses['aircrafts'] += 1
+
+        return result
         # return [self.battlefield[i].air_strike()
         #         for i in coords.in_direction(direction, 3)]
 
     @check_action
     def torpedo(self, coords, direction):
-        torpedo_trail = []
-        coords += direction
-        while (coords.are_inside(self.battlefield) and
-               self.battlefield[coords].is_empty()):
-            torpedo_trail.append(self.battlefield[coords].torpedo_hit())
+        result = {}
+        while coords in self.battlefield:
             coords += direction
-        torpedo_trail.append(self.battlefield[coords].torpedo_hit())
-        return torpedo_trail
+            result[coords] = self.battlefield[coords].torpedo_hit()
+            if result[coords] not in ["miss", "torpedo caught"]:
+                break
+        return result
 
     @check_action
     def radar_jam(self, coords, rotation=0):
@@ -145,7 +160,7 @@ class Ship:
             self.battlefield[i].deploy_anti("radar")
 
     @check_action
-    def deploy_anti_air(self, coords, rotation=0):
+    def anti_air(self, coords, rotation=0):
         for i in Settings.shape("anti_air", coords, rotation):
             self.battlefield[i].deploy_anti("air")
 
@@ -153,6 +168,3 @@ class Ship:
     def torpedo_net(self, coords, rotation=0):
         for i in Settings.shape("torpedo_net", coords, rotation):
             self.battlefield[i].set_torpedo_net()
-
-
-# print([Ship("a",[])])

@@ -1,9 +1,11 @@
 import re
+import traceback
 
 
-from errors import InvalidPlayerPosition, PlayerLeft, InvalidAction
+from errors import *
 from settings import Settings
 from fleets import Fleets
+from ship import Ship
 from vec2d import Vec2D
 from ui.printer import battlefield_print
 
@@ -48,9 +50,9 @@ class Player:
     def choose_fleet(self):
         # self.cout("Choose your fleet. Your options are: {}".format(Fleets.ALL.keys()))
         # self.fleet = Fleets.ALL[self.cin("Choose your fleet: ", Fleets.ALL.keys())]
-        self.fleet = Fleets.ALL["spec"]
-        for i, ship in enumerate(self.fleet):
-            ship.id = i
+        self.fleet = [Ship(*args) for args in Fleets.ALL["spec"]]
+        for ship in self.fleet:
+            ship.id = Settings.SHIP_NAME_ABBR[ship.name]
 
     def deploy_fleet(self, battlefield):
         for ship in self.fleet:
@@ -61,23 +63,6 @@ class Player:
                 coords, rotation = self.get_coords_and_rotation()
             ship.deploy(battlefield, self, coords, rotation)
         battlefield_print(battlefield, Vec2D(0, 0))
-
-    # def deploy_fleet(self, battlefield):
-    #     for ship in self.fleet:
-    #         battlefield_print(battlefield, Vec2D(0, 0))
-    #         coords = Vec2D.parse(self.cin("Enter ship coordinates: (x, y)",
-    #                                       r'\(?(-?[0-9]*) ?,? ?(-?[0-9]*)\)?'))
-    #         rotation = int(self.cin("Enter rotation (0-7)", r'-?[0-7]'))
-    #         while not ship.can_be_deployed(battlefield, self, coords, rotation):
-    #             self.cout("Invalid ship coords and rotation combo")
-    #             coords = Vec2D.parse(self.cin("Enter ship coordinates: (x, y)",
-    #                                           r'\(?(-?[0-9]*) ?,? ?(-?[0-9]*)\)?'))
-    #             rotation = int(self.cin("Enter rotation (0-7)", r'-?[0-7]'))
-    #         ship.deploy(battlefield, self, coords, rotation)
-
-    # def choose_and_deploy_fleet(self, battlefield):
-    #     self.choose_fleet()
-    #     self.deploy_fleet(battlefield)
 
     def get_coords_and_rotation(self):
         examples = ['', 'x y r ', '-x y r ', '-x -y r ', 'x -y r ']
@@ -93,7 +78,13 @@ class Player:
     #     return self.cin('Choose your ship ', [ship.id for ship in self.fleet])
 
     def make_move(self):
-        self.execute_command(*self.parse_command(self.cin("Enter command: ")))
+        while True:
+            try:
+                command = self.parse_command(self.cin("Enter command: "))
+                return self.execute_command(*command)
+            except InvalidCommand as e:
+                print(e)
+                # traceback.print_exc()
 
     def execute_command(self, ship, action, target):
         if action == 'fire_gun':
@@ -103,13 +94,20 @@ class Player:
 
     def parse_command(self, command):
         # regex = r'([0-9]+) ([_a-z]+) \(?(-?[0-9]+,? -?[0-9]+)\)?(?: (.*))?'
-        regex = r'([0-9]) ([_a-z]+) (-?[0-9] -?[0-9])(?: (.*))?'
-        m = re.match(regex, command).groups()
-        ship_id, action, coords = int(m[0]), m[1], Vec2D.parse(m[2])
-        ship = [ship for ship in self.fleet if ship.id == int(ship_id)][0]
+        regex = r'([A-Z]) ([_a-z]+) (-?[0-9] -?[0-9])(?: (.*))?'
+        try:
+            m = re.match(regex, command).groups()
+        except AttributeError as e:
+            raise InvalidCommand('Invalid command format')
+
+        ship_id, action, coords = m[0], m[1], Vec2D.parse(m[2])
+        ships = [ship for ship in self.fleet if ship.id == ship_id]
+
+        if len(ships) != 1:
+            raise InvalidCommand('You don\'t own a ship with that name')
 
         if action not in Settings.RESOURSES.keys():
-            raise InvalidAction('There is no such action')
+            raise InvalidCommand('There is no such action')
 
         if action == 'fire_gun':
             target = coords
@@ -118,6 +116,6 @@ class Player:
         else:
             target = (coords, int(m[3] or 0))
 
-        return (ship, action, target)
+        return (ships[0], action, target)
 
 # print(Player(3).parse_command("1 sdasda_dasdas 0 3 0 3"))

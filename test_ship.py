@@ -2,7 +2,7 @@ import unittest
 from test_helper import must_be_true, must_be_false, must_be_equal, must_raise
 from ship import Ship
 from battlefield import Battlefield
-from shape import Shape
+from shape import line, square
 from player import Player
 from vec2d import Vec2D
 from errors import NonDeployedShipTriesToAct
@@ -14,8 +14,8 @@ class TestShip(unittest.TestCase):
         self.sea = Battlefield(Vec2D(6, 6))
         terrain = [Vec2D(1, 1), Vec2D(-1, -1)]
         self.sea2 = Battlefield(Vec2D(6, 6), terrain)
-        self.ship = Ship("Battle Criuser", Shape.line(5))
-        self.ship2 = Ship("Carrier", Shape.square(3))
+        self.ship = Ship("Battle Criuser", line(5))
+        self.ship2 = Ship("Carrier", square(3))
 
     def tearDown(self):
         self.sea, self.ship, self.ship2 = None, None, None

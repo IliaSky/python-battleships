@@ -1,5 +1,3 @@
-import time
-import traceback
 from random import shuffle
 
 
@@ -13,28 +11,23 @@ from ui.printer import battlefield_print
 class Game:
 
     def __init__(self):
-        try:
-            # player_count = self._get_player_count()
-            player_count = 2
-            self.players = self.init_players(player_count)
-            self.battlefield = Battlefield(Settings.BATTLEFIELD_SIZE)
+        # player_count = self._get_player_count()
+        player_count = 2
+        self.players = self.init_players(player_count)
+        self.battlefield = Battlefield(Settings.BATTLEFIELD_SIZE)
 
-            self.prepare_fleets()
-            # self.ask_for_alliances()
-            self.players[1].make_move()
-            battlefield_print(self.battlefield)
-            self.players[0].make_move()
-            battlefield_print(self.battlefield)
-            self.players[1].make_move()
-            battlefield_print(self.battlefield)
-            self.players[0].make_move()
-            battlefield_print(self.battlefield)
-            # self.start()
+        self.prepare_fleets()
+        # self.ask_for_alliances()
+        # self.players[1].make_move()
+        # battlefield_print(self.battlefield)
+        # self.players[0].make_move()
+        # battlefield_print(self.battlefield)
+        # self.players[1].make_move()
+        # battlefield_print(self.battlefield)
+        # self.players[0].make_move()
+        # battlefield_print(self.battlefield)
+        self.start()
 
-        except Exception as e:
-            traceback.print_exc()
-        finally:
-            time.sleep(1)
         # if player_count in range(4):
         #     self.players = [Player(i) for i in range(player_count)]
 
@@ -62,15 +55,19 @@ class Game:
                 try:
                     for action in range(Settings.ACTIONS_PER_TURN):
                         player.make_move()
+                        battlefield_print(self.battlefield)
                 except PlayerLeft as e:
                     self.players.remove(e.player)
+                    if not self.is_in_progress():
+                        print(self.alive_players()[0].name + " won!")
+                        break
 
     def alive_players(self):
         return [player for player in self.players if player.fleet != []]
 
     def is_in_progress(self):
-        # return len(set([player.team for player in self.alive_players()])) == 1
-        return len(self.alive_players()) == 1
+        # return len(set([player.team for player in self.alive_players()])) >= 1
+        return len(self.alive_players()) != 1
 
     def ask_for_alliances(self):
         for player in self.players:

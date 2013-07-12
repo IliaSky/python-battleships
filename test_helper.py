@@ -10,7 +10,7 @@ def must_be_false(expression):
 
 
 def must_be_equal(expected, expression):
-    return unittest.TestCase().assertTrue(expected, expression)
+    return unittest.TestCase().assertEqual(expected, expression)
 
 
 def must_raise(error, *args):
